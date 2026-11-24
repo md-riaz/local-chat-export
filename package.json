@@ -1,0 +1,21 @@
+{
+  "name": "chatgpt-local-exporter",
+  "version": "0.1.0",
+  "description": "Local-only printable ChatGPT conversation exporter",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "verify:local": "node scripts/verify-local.mjs",
+    "validate": "npm test && npm run verify:local && npx openspec validate add-local-chatgpt-pdf-exporter --strict"
+  },
+  "keywords": [
+    "chrome-extension",
+    "chat-export",
+    "local-only"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@fission-ai/openspec": "^2.1.1"
+  }
+}

@@ -1,0 +1,45 @@
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #fff; color: #1f2937; }
+.export { max-width: 880px; margin: 0 auto; padding: 52px 34px; }
+.export[data-theme="dark"] { background: #212121; color: #ececec; min-height: 100vh; }
+.export-header { border-bottom: 1px solid #d9d9d9; padding-bottom: 22px; margin-bottom: 30px; }
+[data-theme="dark"] .export-header { border-color: #505050; }
+.eyebrow { color: #10a37f; font-size: 11px; font-weight: 800; letter-spacing: .12em; }
+h1 { font-size: 28px; line-height: 1.2; margin: 8px 0; overflow-wrap: anywhere; }
+.export-header p { margin: 0; color: #6b7280; font-size: 13px; }
+[data-theme="dark"] .export-header p { color: #b4b4b4; }
+.message { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 14px; padding: 19px 0; break-inside: avoid; page-break-inside: avoid; }
+.message + .message { border-top: 1px solid #ebebeb; }
+[data-theme="dark"] .message + .message { border-color: #464646; }
+.avatar { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 8px; background: #10a37f; color: #fff; font-size: 10px; font-weight: 800; }
+.message-user .avatar { background: #5b5fc7; }
+.message-content { min-width: 0; font-size: 15px; line-height: 1.62; overflow-wrap: anywhere; }
+.message-content > :first-child { margin-top: 0; }
+.message-content > :last-child { margin-bottom: 0; }
+.message-content a { color: #067a62; }
+[data-theme="dark"] .message-content a { color: #5ee0c0; }
+pre { overflow: auto; padding: 14px; border-radius: 9px; background: #f4f4f4; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; break-inside: avoid; page-break-inside: avoid; white-space: pre-wrap; }
+[data-theme="dark"] pre { background: #171717; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+:not(pre) > code { background: #f0f0f0; padding: 1px 4px; border-radius: 4px; }
+[data-theme="dark"] :not(pre) > code { background: #363636; }
+table { width: 100%; border-collapse: collapse; display: table; break-inside: avoid; page-break-inside: avoid; }
+th, td { border: 1px solid #d7d7d7; padding: 8px; vertical-align: top; }
+[data-theme="dark"] th, [data-theme="dark"] td { border-color: #5a5a5a; }
+tr { break-inside: avoid; page-break-inside: avoid; }
+img { max-width: 100%; height: auto; border-radius: 8px; break-inside: avoid; page-break-inside: avoid; }
+blockquote { border-left: 3px solid #10a37f; margin-left: 0; padding-left: 14px; color: #5f6368; }
+[data-theme="dark"] blockquote { color: #c3c3c3; }
+@media print {
+  body { background: #fff !important; color: #111827 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .export { max-width: none; padding: 0; }
+  .export[data-theme="dark"] { background: #212121 !important; color: #f3f3f3 !important; }
+  .message { break-inside: avoid; page-break-inside: avoid; }
+  pre { break-inside: avoid; page-break-inside: avoid; }
+  table { break-inside: avoid; page-break-inside: avoid; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  img { break-inside: avoid; page-break-inside: avoid; }
+  [data-page-break-pairs="true"] .message-user { break-before: page; page-break-before: always; }
+  [data-page-break-pairs="true"] .conversation > .message-user:first-child { break-before: auto; page-break-before: auto; }
+}
