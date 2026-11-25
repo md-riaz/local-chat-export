@@ -5,7 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test test/*.test.mjs",
+    "build:content": "node scripts/build-content-script.mjs",
+    "test": "npm run build:content && node --test test/*.test.mjs",
     "verify:local": "node scripts/verify-local.mjs",
     "validate": "npm test && npm run verify:local && npx openspec validate add-local-chatgpt-pdf-exporter --strict"
   },

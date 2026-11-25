@@ -45,6 +45,11 @@ export function messageRole(element) {
   return accessible.includes('you') ? 'user' : 'assistant';
 }
 
+export function messageTimestamp(element) {
+  const time = element.querySelector?.('time[datetime], time') ?? null;
+  return time?.getAttribute?.('datetime') || time?.textContent?.trim() || '';
+}
+
 export function selectMessages(messages = [], selectedIndexes = []) {
   const selected = new Set(selectedIndexes.map(Number).filter((index) => Number.isInteger(index) && index >= 0 && index < messages.length));
   return messages.filter((_, index) => selected.has(index));
@@ -56,10 +61,14 @@ export function captureConversation(documentLike = document) {
   const messages = candidates
     .filter((element) => !seen.has(element) && seen.add(element))
     .filter((element) => element.textContent?.trim())
-    .map((element) => ({
-      role: messageRole(element),
-      html: sanitizeMessageHtml(element),
-      text: element.textContent.trim(),
-    }));
+    .map((element) => {
+      const timestamp = messageTimestamp(element);
+      return {
+        role: messageRole(element),
+        html: sanitizeMessageHtml(element),
+        text: element.textContent.trim(),
+        ...(timestamp ? { timestamp } : {}),
+      };
+    });
   return { title: titleFromDocument(documentLike), messages };
 }

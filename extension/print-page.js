@@ -8,7 +8,8 @@ const payload = id ? await consumePayload(chrome.storage.session, id) : null;
 if (!payload?.snapshot?.messages?.length) {
   root.textContent = 'This local export is unavailable or has expired. Return to ChatGPT and export again.';
 } else {
-  document.title = `${payload.options.title || payload.snapshot.title || 'ChatGPT conversation'} · Local export`;
+  const filename = payload.options.filename || payload.options.title || payload.snapshot.title || 'ChatGPT conversation';
+  document.title = filename;
   const style = document.createElement('style');
   style.textContent = pageStyle(payload.options);
   document.head.append(style);

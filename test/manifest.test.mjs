@@ -12,6 +12,6 @@ test('manifest is a restricted Manifest V3 ChatGPT extension', () => {
     'https://chat.openai.com/*',
   ]);
   assert.deepEqual(manifest.content_scripts[0].matches, manifest.host_permissions);
-  assert.equal(manifest.content_scripts[0].js.at(-1), 'content.js');
+  assert.deepEqual(manifest.content_scripts[0].js, ['content-script.js']);
   assert.equal(manifest.action.default_title, 'Export conversation locally');
 });

@@ -14,7 +14,10 @@ h1 { font-size: 28px; line-height: 1.2; margin: 8px 0; overflow-wrap: anywhere; 
 [data-theme="dark"] .message + .message { border-color: #464646; }
 .avatar { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 8px; background: #10a37f; color: #fff; font-size: 10px; font-weight: 800; }
 .message-user .avatar { background: #5b5fc7; }
-.message-content { min-width: 0; font-size: 15px; line-height: 1.62; overflow-wrap: anywhere; }
+.message-content { min-width: 0; font-size: var(--message-font-size, 15px); line-height: 1.62; overflow-wrap: anywhere; }
+.message-time { display: block; margin-top: 10px; color: #6b7280; font-size: .78em; }
+[data-theme="dark"] .message-time { color: #b4b4b4; }
+.message-content .citation, .message-content a { overflow-wrap: anywhere; }
 .message-content > :first-child { margin-top: 0; }
 .message-content > :last-child { margin-bottom: 0; }
 .message-content a { color: #067a62; }

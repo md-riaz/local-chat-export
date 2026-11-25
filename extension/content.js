@@ -1,5 +1,6 @@
 import { createDialog, serializeOptions } from './dialog.js';
 import { captureConversation, selectMessages } from './capture.js';
+import { copyExportText } from './clipboard.js';
 
 const BUTTON_ID = 'local-chat-export-trigger';
 
@@ -23,6 +24,7 @@ function openDialog() {
   document.body.append(dialog);
   const form = dialog.querySelector('form');
   form.querySelector('[name="title"]').value = snapshot.title;
+  form.querySelector('[name="filename"]').value = snapshot.title;
   form.querySelector('[name="title"]').focus();
   dialog.querySelector('[data-action="cancel"]').addEventListener('click', () => dialog.remove());
   dialog.querySelector('[data-action="select-all"]').addEventListener('click', () => {
@@ -30,6 +32,17 @@ function openDialog() {
   });
   dialog.querySelector('[data-action="select-none"]').addEventListener('click', () => {
     form.querySelectorAll('[name="message"]').forEach((input) => { input.checked = false; });
+  });
+  dialog.querySelector('[data-action="copy"]').addEventListener('click', async () => {
+    const selectedIndexes = [...form.querySelectorAll('[name="message"]:checked')].map((input) => input.value);
+    const messages = selectMessages(snapshot.messages, selectedIndexes);
+    if (!messages.length) return showError('Select at least one message to copy.');
+    try {
+      await copyExportText({ ...snapshot, messages });
+      showError('Copied selected conversation text.');
+    } catch (error) {
+      showError(error.message);
+    }
   });
   form.addEventListener('submit', (event) => {
     event.preventDefault();
