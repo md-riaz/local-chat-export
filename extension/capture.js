@@ -45,6 +45,11 @@ export function messageRole(element) {
   return accessible.includes('you') ? 'user' : 'assistant';
 }
 
+export function selectMessages(messages = [], selectedIndexes = []) {
+  const selected = new Set(selectedIndexes.map(Number).filter((index) => Number.isInteger(index) && index >= 0 && index < messages.length));
+  return messages.filter((_, index) => selected.has(index));
+}
+
 export function captureConversation(documentLike = document) {
   const seen = new Set();
   const candidates = MESSAGE_SELECTORS.flatMap((selector) => [...documentLike.querySelectorAll(selector)]);

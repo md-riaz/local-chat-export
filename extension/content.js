@@ -1,5 +1,5 @@
 import { createDialog, serializeOptions } from './dialog.js';
-import { captureConversation } from './capture.js';
+import { captureConversation, selectMessages } from './capture.js';
 
 const BUTTON_ID = 'local-chat-export-trigger';
 
@@ -14,22 +14,33 @@ function showError(message) {
 
 function openDialog() {
   if (document.querySelector('.lce-dialog')) return;
-  const dialog = createDialog();
+  const snapshot = captureConversation(document);
+  if (!snapshot.messages.length) {
+    showError('No visible conversation messages found on this page.');
+    return;
+  }
+  const dialog = createDialog(snapshot);
   document.body.append(dialog);
   const form = dialog.querySelector('form');
-  form.querySelector('[name="title"]').value = captureConversation(document).title;
+  form.querySelector('[name="title"]').value = snapshot.title;
   form.querySelector('[name="title"]').focus();
   dialog.querySelector('[data-action="cancel"]').addEventListener('click', () => dialog.remove());
+  dialog.querySelector('[data-action="select-all"]').addEventListener('click', () => {
+    form.querySelectorAll('[name="message"]').forEach((input) => { input.checked = true; });
+  });
+  dialog.querySelector('[data-action="select-none"]').addEventListener('click', () => {
+    form.querySelectorAll('[name="message"]').forEach((input) => { input.checked = false; });
+  });
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const snapshot = captureConversation(document);
-    if (!snapshot.messages.length) {
-      dialog.remove();
-      showError('No visible conversation messages found on this page.');
+    const selectedIndexes = [...form.querySelectorAll('[name="message"]:checked')].map((input) => input.value);
+    const messages = selectMessages(snapshot.messages, selectedIndexes);
+    if (!messages.length) {
+      showError('Select at least one message to export.');
       return;
     }
     const options = serializeOptions(form);
-    chrome.runtime.sendMessage({ type: 'local-export:create', payload: { snapshot, options } }, (response) => {
+    chrome.runtime.sendMessage({ type: 'local-export:create', payload: { snapshot: { ...snapshot, messages }, options } }, (response) => {
       if (!response?.ok) showError(response?.error || 'Could not open the local print view.');
     });
     dialog.remove();

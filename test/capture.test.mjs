@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { captureConversation, sanitizeMessageHtml } from '../extension/capture.js';
+import { captureConversation, sanitizeMessageHtml, selectMessages } from '../extension/capture.js';
 
 class ElementMock {
   constructor({ tagName = 'div', attributes = {}, textContent = '', innerHTML = '', children = [] } = {}) {
@@ -50,4 +50,17 @@ test('sanitizeMessageHtml drops active and unsafe markup while retaining readabl
   const sanitized = sanitizeMessageHtml(source);
   assert.match(sanitized, /<p>Hello<\/p>/);
   assert.doesNotMatch(sanitized, /script|onclick|javascript:/i);
+});
+
+test('selectMessages exports only checked messages in their original order', () => {
+  const messages = [
+    { role: 'user', text: 'First' },
+    { role: 'assistant', text: 'Second' },
+    { role: 'user', text: 'Third' },
+  ];
+  assert.deepEqual(selectMessages(messages, ['2', '0', '2', 'invalid', '-1']), [messages[0], messages[2]]);
+});
+
+test('selectMessages returns an empty selection when no valid messages are checked', () => {
+  assert.deepEqual(selectMessages([{ text: 'One' }], []), []);
 });
